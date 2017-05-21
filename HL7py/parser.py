@@ -65,15 +65,15 @@ def _to_data(data_type, val):
         try:
             trial = datetime.datetime.strptime(val, constants.MINUTE_TIME_FORMAT)
             return trial
-        except ValueError, e:
+        except ValueError as e:
             try:
                 trial = datetime.datetime.strptime(val, constants.SECOND_TIME_FORMAT)
                 return trial
-            except ValueError,e2:
+            except ValueError as e2:
                 try:
                     trial = datetime.datetime.strptime(val, '%Y%m%d %H:%M:%S')
                     return trial
-                except ValueError,e2:
+                except ValueError as e2:
                     return val
         except TypeError:
             return val
@@ -83,7 +83,7 @@ def _to_data(data_type, val):
         try:
             trial = datetime.datetime.strptime(val, constants.DATE_TIME_FORMAT)
             return trial
-        except ValueError, e:
+        except ValueError as e:
             return None
         except TypeError:
             return val
@@ -101,7 +101,7 @@ def _to_str(data_type, val):
         try:
             return datetime.datetime.strftime(val, constants.MINUTE_TIME_FORMAT)
 
-        except TypeError, te:
+        except TypeError as te:
             if val == '':
                 return ''
             return ''
@@ -171,7 +171,7 @@ class Node(object):
         for i, node in enumerate(self._child_nodes):
             try:
                 node.set_from_str(sub_vals[i], delims, delim_idx + 1)
-            except IndexError, ie:
+            except IndexError as ie:
                 # This is the case where we have more nodes than values. This is OK per the
                 # HL7 specs so set them to ''. will result in something like
                 # ABC|1|3|3|7||||||||.
@@ -214,7 +214,7 @@ class Node(object):
         for node in self._child_nodes:
             try:
                 node._set_from_data(args.get(node._code))
-            except Exception, e:
+            except Exception as e:
                 node._set_from_data(str(e))
 
 
@@ -233,7 +233,7 @@ class Node(object):
     hl7 = property(_get_as_str)
 
     def fmt_tree(self, indent=''):
-        print indent + self._code + '|' + str(self._value)
+        print(indent + self._code + '|' + str(self._value))
         indent += '  '
         for node in self._child_nodes:
             node.fmt_tree(indent)
@@ -375,7 +375,7 @@ class Segment(object):
         Prints the tree format of this node and all of its sub-nodes. Useful for debugging.
         """
 
-        print indent, self.code
+        print(indent, self.code)
         for child in self.child_segments:
             child.fmt_tree(indent + '    ')
 
